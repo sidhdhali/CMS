@@ -40,6 +40,13 @@ function Content()
     setContents((prevContents) => [...prevContents, newContent]);
   };
 
+  const isVideo = (url) =>
+  {
+    const videoExtensions = ['mp4', 'mov', 'avi', 'mkv', 'webm'];
+    const extension = url.split('.').pop().toLowerCase();
+    return videoExtensions.includes(extension);
+  };
+
   return (
     <div className="p-4">
       <NewContent onContentAdded={handleContentAdded} />
@@ -52,7 +59,14 @@ function Content()
               <h2 className="text-xl font-semibold mb-2">{c.title}</h2>
               <p className="text-gray-600 mb-2">Owner: {c.owner}</p>
               {c.content_url && (
-                <img src={c.content_url} alt={c.title} className="max-w-full h-auto mb-2" />
+                isVideo(c.content_url) ? (
+                  <video controls className="max-w-full h-auto mb-2">
+                    <source src={c.content_url} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <img src={c.content_url} alt={c.title} className="max-w-full h-auto mb-2" />
+                )
               )}
               <button
                 className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700"
